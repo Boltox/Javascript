@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript Exercises</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    table { border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 8px 12px; }
+    th { background-color: #f4f4f4; }
+  </style>
+</head>
+<body>
+  <h1>Workshop 4</h1>
+
+  <button onclick="modifyHeading()">Button 1</button>
+  <button onclick="modifyExercise2Heading()">Button 2</button>
+  <button onclick="appendParagraph()">Button 3</button>
+
+  <h2>Exercise 2</h2>
+
+  <label><input type="checkbox" onchange="hideMe()"> Hide me</label>
+  <label><input type="checkbox" onchange="showMe()"> Show me</label>
+  <label><input type="checkbox" onchange="surprise()"> Surprise</label>
+
+  <div id="me" class="surprise" style="margin-top:10px;">I’m the element with id="me"</div>
+
+  <h2>Exercise 3</h2>
+  <select onchange="changeImage(this)">
+    <option value="car1">Ferrari</option>
+    <option value="car2">Porsche</option>
+    <option value="car3">BMW</option>
+  </select>
+
+  <br><br>
+
+  <ul>
+    <li onclick="moveImage()">Move</li>
+    <li onclick="doMove()">Animate</li>
+    <li onclick="fadeOut()">Fade Out</li>
+    <li onclick="disappear()">Disappear</li>
+  </ul>
+
+  <h2>Exercise 5</h2>
+  <table>
+    <tr><th>Name</th><th>Position</th><th>Salary</th></tr>
+    <tr><td>Tiger Nixon</td><td>System Architect</td><td>$320,800</td></tr>
+    <tr><td>Garrett Winters</td><td>Accountant</td><td>$170,750</td></tr>
+    <tr><td>Ashton Cox</td><td>Junior Technical Author</td><td>$86,000</td></tr>
+    <tr><td>Cedric Kelly</td><td>Senior Javascript Developer</td><td>$433,060</td></tr>
+    <tr><td>Airi Satou</td><td>Accountant</td><td>$162,700</td></tr>
+  </table>
+
+  <div style="margin-top:10px;">
+    <input id="nameField" placeholder="Name">
+    <input id="positionField" placeholder="Position">
+    <input id="salaryField" placeholder="Salary">
+    <button onclick="addRow()">Add Row</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
