@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Workshop 5</title>
+  <style>
+    :root{
+      --bg:#0f1315;
+      --card:#111417;
+      --muted:#9aa3a6;
+      --accent:#26a69a;
+      --danger:#ff6b6b;
+      --text:#e6eef0;
+      --card-border: rgba(255,255,255,0.04);
+      --glass: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+    html,body{height:100%}
+    body{
+      margin:0;
+      padding:32px;
+      background: radial-gradient(1200px 500px at 10% 10%, rgba(40,48,50,0.4), transparent),
+                  radial-gradient(1000px 400px at 90% 90%, rgba(16,24,28,0.35), transparent),
+                  var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    header{
+      display:flex;
+      align-items:baseline;
+      gap:12px;
+      margin-bottom:24px;
+    }
+    header h1{
+      margin:0;
+      font-size:20px;
+      letter-spacing:0.6px;
+    }
+    header p{margin:0;color:var(--muted);font-size:13px}
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:20px;
+      align-items:start;
+    }
+    .card{
+      background: var(--card);
+      border:1px solid var(--card-border);
+      padding:18px;
+      border-radius:10px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    }
+    h2{
+      margin:0 0 8px 0;
+      font-size:16px;
+    }
+    small.desc{display:block;color:var(--muted);margin-bottom:12px;font-size:13px}
+    form{display:block}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    label{
+      display:block;
+      font-size:13px;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+    input[type="text"], input[type="email"], input[type="number"], textarea, select{
+      width:100%;
+      padding:10px 12px;
+      background:transparent;
+      border:1px solid rgba(255,255,255,0.04);
+      color:var(--text);
+      border-radius:8px;
+      outline:none;
+      box-sizing:border-box;
+    }
+    textarea{min-height:90px; resize:vertical;}
+    .row > .col{flex:1 1 200px; min-width:180px}
+    .muted{color:var(--muted);font-size:13px}
+    .btn{
+      display:inline-block;
+      padding:10px 14px;
+      border-radius:8px;
+      background:var(--accent);
+      color:#05221f;
+      font-weight:600;
+      border:none;
+      cursor:pointer;
+    }
+    .btn.ghost{
+      background:transparent;
+      color:var(--muted);
+      border:1px solid rgba(255,255,255,0.03);
+    }
+    .error{color:var(--danger);font-size:13px;margin-top:8px}
+    .result{margin-top:10px;color:var(--accent);font-weight:700}
+    .small-muted{font-size:12px;color:var(--muted)}
+    .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.02),transparent);margin:14px 0;border-radius:2px}
+    footer{margin-top:18px;color:var(--muted);font-size:12px}
+    @media (max-width:980px){
+      .grid{grid-template-columns: 1fr}
+    }
+    .hint{font-size:12px;color:var(--muted);margin-top:8px}
+    .inline-error{color:var(--danger);font-size:12px;margin-top:6px}
+    .checkbox-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .chip{padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,0.03);font-size:13px;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Workshop 5</h1>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="card" id="exercise1">
+      <h2>Exercise 1: Contact Form</h2>
+      <small class="desc">Validate email length & character, and ensure comment is present and trimmed to max 50 characters.</small>
+
+      <form id="contactForm" novalidate>
+        <div class="row">
+          <div class="col">
+            <label for="email">Email address</label>
+            <input id="email" name="email" type="email" placeholder="you@example.com" required>
+            <div id="emailError" class="inline-error" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <label for="comment">Comment</label>
+          <textarea id="comment" name="comment" placeholder="Type your message..."></textarea>
+          <div id="commentError" class="inline-error" aria-live="polite"></div>
+          <div class="hint">Max 50 characters. Will be trimmed automatically.</div>
+        </div>
+
+        <div style="margin-top:12px;">
+          <button class="btn" type="submit">Send</button>
+          <button type="button" class="btn ghost" id="contactReset">Reset</button>
+          <div id="contactSuccess" class="result" role="status" aria-live="polite"></div>
+        </div>
+      </form>
+    </section>
+
+    <section class="card" id="exercise2">
+      <h2>Exercise 2: Membership Calculator</h2>
+      <small class="desc">Choose a plan and number of years. Rules:
+        <ul style="margin:6px 0 0 18px;color:var(--muted)">
+          <li>Base prices: Basic €10, Premium €15, Gold €20, Platinum €25</li>
+          <li>20% discount if years &gt; 2</li>
+          <li>If years ≥ 5, apply 20% discount and extra €5 off (special bonus)</li>
+        </ul>
+      </small>
+
+      <form id="membershipForm" novalidate>
+        <div class="row">
+          <div class="col">
+            <label for="plan">Membership Type</label>
+            <select id="plan" name="plan">
+              <option value="10">Basic — €10 / year</option>
+              <option value="15">Premium — €15 / year</option>
+              <option value="20">Gold — €20 / year</option>
+              <option value="25">Platinum — €25 / year</option>
+            </select>
+          </div>
+
+          <div class="col">
+            <label for="years">Years</label>
+            <input id="years" name="years" type="number" min="1" value="1">
+          </div>
+        </div>
+
+        <div style="margin-top:12px;">
+          <button class="btn" type="button" id="calcMembership">Calculate Cost</button>
+          <button type="button" class="btn ghost" id="membershipReset">Reset</button>
+          <div id="membershipResult" class="result" aria-live="polite"></div>
+          <div id="membershipNote" class="hint"></div>
+        </div>
+      </form>
+    </section>
+
+    <section class="card" id="exercise3">
+      <h2>Exercise 3: Book Order</h2>
+      <small class="desc">Calculate quantity × price + VAT - discount + shipping. If quantity &gt; 100, discount is doubled.</small>
+
+      <form id="bookForm" novalidate>
+        <div class="row">
+          <div class="col">
+            <label for="qty">Quantity</label>
+            <input id="qty" name="qty" type="number" min="0" value="0">
+          </div>
+          <div class="col">
+            <label for="price">Price Per Unit (€)</label>
+            <input id="price" name="price" type="number" step="0.01" min="0" value="12.50">
+          </div>
+        </div>
+
+        <div style="margin-top:10px;" class="row">
+          <div class="col">
+            <label for="vat">VAT (%)</label>
+            <input id="vat" name="vat" type="number" step="0.01" value="24">
+          </div>
+          <div class="col">
+            <label for="discount">Discount (%)</label>
+            <input id="discount" name="discount" type="number" step="0.01" value="5">
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <label for="shipping">Shipping (€)</label>
+          <input id="shipping" name="shipping" type="number" step="0.01" min="0" value="5.00">
+        </div>
+
+        <div style="margin-top:12px;">
+          <button class="btn" type="button" id="calcBook">Calculate Order</button>
+          <button type="button" class="btn ghost" id="bookReset">Reset</button>
+          <div id="bookResult" class="result" aria-live="polite"></div>
+          <div id="bookBreakdown" class="small-muted"></div>
+        </div>
+      </form>
+    </section>
+
+    <section class="card" id="exercise4">
+      <h2>Exercise 4: Hidden Extra Fields</h2>
+      <small class="desc">Choose preferred contact method(s) and show additional inputs dynamically.</small>
+
+      <form id="extraForm" novalidate>
+        <label>Preferred contact method(s)</label>
+        <div class="checkbox-row">
+          <label><input type="checkbox" name="pref" value="email" id="prefEmail"> Email</label>
+          <label><input type="checkbox" name="pref" value="phone" id="prefPhone"> Phone</label>
+          <label><input type="checkbox" name="pref" value="sms" id="prefSms"> SMS</label>
+        </div>
+
+        <div id="extraFields" style="margin-top:12px;">
+        </div>
+
+        <div style="margin-top:12px;">
+          <button class="btn" type="button" id="submitExtra">Submit Preferences</button>
+          <button type="button" class="btn ghost" id="extraReset">Reset</button>
+          <div id="extraResult" class="result" aria-live="polite"></div>
+        </div>
+      </form>
+    </section>
+
+  </main>
+
+  <script>
+
+    function showError(elSelector, message) {
+      const el = document.querySelector(elSelector);
+      if (el) el.textContent = message;
+    }
+    function clearError(elSelector) { showError(elSelector, ''); }
+    function toNumber(v){ 
+      const n = parseFloat(v);
+      return Number.isFinite(n) ? n : 0;
+    }
+
+    (function setupContact(){
+      const form = document.getElementById('contactForm');
+      const emailInput = document.getElementById('email');
+      const commentInput = document.getElementById('comment');
+      const emailErr = '#emailError';
+      const commentErr = '#commentError';
+      const success = document.getElementById('contactSuccess');
+
+      form.addEventListener('submit', function(e){
+        e.preventDefault(); 
+        clearError(emailErr);
+        clearError(commentErr);
+        success.textContent = '';
+
+        const email = (emailInput.value || '').trim();
+        const commentRaw = (commentInput.value || '');
+        const comment = commentRaw.trim().slice(0,50); 
+
+        let valid = true;
+
+        if (email.length < 6 || email.length > 15) {
+          showError(emailErr, 'Email must be between 6 and 15 characters.');
+          valid = false;
+        }
+        if (!email.includes('@')) {
+          showError(emailErr, (document.querySelector(emailErr).textContent ? document.querySelector(emailErr).textContent + ' ' : '') + 'Email must contain "@".');
+          valid = false;
+        }
+
+        if (comment.length === 0) {
+          showError(commentErr, 'Comment cannot be empty.');
+          valid = false;
+        } else {
+          commentInput.value = comment;
+        }
+
+        if (!valid) {
+          const first = document.querySelector('.inline-error:not(:empty)');
+          if (first) first.previousElementSibling?.focus?.();
+          return;
+        }
+
+        success.textContent = 'Form validated — thanks! (Demo: not sent)';
+      });
+
+      document.getElementById('contactReset').addEventListener('click', function(){
+        form.reset();
+        clearError(emailErr);
+        clearError(commentErr);
+        success.textContent = '';
+      });
+    })();
+
+    (function setupMembership(){
+      const btn = document.getElementById('calcMembership');
+      const resetBtn = document.getElementById('membershipReset');
+      const resultEl = document.getElementById('membershipResult');
+      const noteEl = document.getElementById('membershipNote');
+
+      function calculate(){
+        resultEl.textContent = '';
+        noteEl.textContent = '';
+
+        const plan = toNumber(document.getElementById('plan').value);
+        let years = Math.trunc(toNumber(document.getElementById('years').value));
+        if (years < 1) years = 1;
+
+        const base = plan * years;
+
+        let discountPct = 0;
+        let extraOff = 0;
+
+        if (years > 2) {
+          discountPct = 20; 
+        }
+        if (years >= 5) {
+          extraOff = 5;
+        }
+
+        const discountAmount = (base * discountPct) / 100;
+        const total = base - discountAmount - extraOff;
+
+        resultEl.textContent = 'Total cost: €' + total.toFixed(2);
+        const notes = [
+          'Base: €' + base.toFixed(2),
+          discountPct ? ('Discount: ' + discountPct + '% (−€' + discountAmount.toFixed(2) + ')') : null,
+          extraOff ? ('Extra bonus: −€' + extraOff.toFixed(2)) : null
+        ].filter(Boolean).join(' · ');
+        noteEl.textContent = notes;
+      }
+
+      btn.addEventListener('click', calculate);
+      resetBtn.addEventListener('click', function(){
+        document.getElementById('membershipForm').reset();
+        resultEl.textContent = '';
+        noteEl.textContent = '';
+      });
+    })();
+
+    (function setupBookOrder(){
+      const calcBtn = document.getElementById('calcBook');
+      const resetBtn = document.getElementById('bookReset');
+      const resultEl = document.getElementById('bookResult');
+      const breakdownEl = document.getElementById('bookBreakdown');
+
+      function calculateOrder(){
+        resultEl.textContent = '';
+        breakdownEl.textContent = '';
+
+        const qty = Math.trunc(toNumber(document.getElementById('qty').value));
+        const price = toNumber(document.getElementById('price').value);
+        const vatPct = toNumber(document.getElementById('vat').value);
+        let discountPct = toNumber(document.getElementById('discount').value);
+        const shipping = toNumber(document.getElementById('shipping').value);
+
+        const quantity = qty < 0 ? 0 : qty;
+        const unitPrice = price < 0 ? 0 : price;
+
+        if (quantity === 0) {
+          resultEl.textContent = 'Total: €0.00';
+          breakdownEl.textContent = 'No items ordered.';
+          return;
+        }
+
+        const subtotal = unitPrice * quantity;
+
+        if (quantity > 100) {
+          discountPct = discountPct * 2;
+        }
+
+        const discountAmount = (subtotal * discountPct) / 100;
+
+        const afterDiscount = subtotal - discountAmount;
+
+        const vatAmount = (afterDiscount * vatPct) / 100;
+
+        const total = afterDiscount + vatAmount + shipping;
+
+        resultEl.textContent = 'Total: €' + total.toFixed(2);
+
+        breakdownEl.innerHTML =
+          'Subtotal: €' + subtotal.toFixed(2) +
+          ' · Discount: ' + discountPct.toFixed(2) + '% (−€' + discountAmount.toFixed(2) + ')' +
+          ' · After discount: €' + afterDiscount.toFixed(2) +
+          ' · VAT: €' + vatAmount.toFixed(2) +
+          ' · Shipping: €' + shipping.toFixed(2);
+      }
+
+      calcBtn.addEventListener('click', calculateOrder);
+      resetBtn.addEventListener('click', function(){
+        document.getElementById('bookForm').reset();
+        resultEl.textContent = '';
+        breakdownEl.textContent = '';
+      });
+    })();
+
+    (function setupExtraFields(){
+      const prefEmail = document.getElementById('prefEmail');
+      const prefPhone = document.getElementById('prefPhone');
+      const prefSms = document.getElementById('prefSms');
+      const extraFields = document.getElementById('extraFields');
+      const submitBtn = document.getElementById('submitExtra');
+      const resetBtn = document.getElementById('extraReset');
+      const resultEl = document.getElementById('extraResult');
+
+      function renderExtras(){
+        extraFields.innerHTML = '';
+        resultEl.textContent = '';
+
+        if (prefEmail.checked) {
+          const wrapper = document.createElement('div');
+          wrapper.innerHTML = `
+            <label for="extraEmail">Preferred email</label>
+            <input id="extraEmail" name="extraEmail" type="email" placeholder="you@example.com">
+            <div class="hint">We will use this email for contact.</div>
+          `;
+          extraFields.appendChild(wrapper);
+        }
+        if (prefPhone.checked) {
+          const w = document.createElement('div');
+          w.innerHTML = `
+            <label for="extraPhone">Phone number</label>
+            <input id="extraPhone" name="extraPhone" type="text" placeholder="+358 40 123 4567">
+            <div class="hint">Include country code if needed.</div>
+          `;
+          extraFields.appendChild(w);
+        }
+        if (prefSms.checked) {
+          const w = document.createElement('div');
+          w.innerHTML = `
+            <label for="extraSms">SMS number</label>
+            <input id="extraSms" name="extraSms" type="text" placeholder="+358 40 123 4567">
+            <div class="hint">We will send short messages to this number.</div>
+          `;
+          extraFields.appendChild(w);
+        }
+
+        if (!prefEmail.checked && !prefPhone.checked && !prefSms.checked) {
+          extraFields.innerHTML = '<div class="hint">No extra fields. Select a contact method to add details.</div>';
+        }
+      }
+
+      [prefEmail, prefPhone, prefSms].forEach(chk => chk.addEventListener('change', renderExtras));
+      renderExtras();
+
+      submitBtn.addEventListener('click', function(){
+        resultEl.textContent = '';
+        const errors = [];
+        const selected = [];
+
+        if (prefEmail.checked) {
+          selected.push('Email');
+          const e = document.getElementById('extraEmail');
+          const val = e ? (e.value||'').trim() : '';
+          if (!val || !val.includes('@')) errors.push('Provide a valid email address.');
+        }
+        if (prefPhone.checked) {
+          selected.push('Phone');
+          const e = document.getElementById('extraPhone');
+          const val = e ? (e.value||'').trim() : '';
+          if (!val || val.length < 5) errors.push('Provide a valid phone number for Phone.');
+        }
+        if (prefSms.checked) {
+          selected.push('SMS');
+          const e = document.getElementById('extraSms');
+          const val = e ? (e.value||'').trim() : '';
+          if (!val || val.length < 5) errors.push('Provide a valid phone number for SMS.');
+        }
+
+        if (errors.length) {
+          resultEl.style.color = 'var(--danger)';
+          resultEl.textContent = 'Errors: ' + errors.join(' ');
+          resultEl.style.color = '';
+          return;
+        }
+
+        resultEl.style.color = '';
+        resultEl.textContent = 'Preferences saved: ' + (selected.length ? selected.join(', ') : 'none') + ' (Demo)';
+      });
+
+      resetBtn.addEventListener('click', function(){
+        document.getElementById('extraForm').reset();
+        renderExtras();
+        resultEl.textContent = '';
+      });
+    })();
+  </script>
+</body>
+</html>
