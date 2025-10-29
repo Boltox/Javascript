@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Workshop 6 - Using LocalStorage & SessionStorage</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background: #121212;
+      color: #f5f5f5;
+    }
+    h2, h3 {
+      color: #00bfff;
+    }
+    label {
+      display: inline-block;
+      width: 130px;
+    }
+    input[type="text"], input[type="date"] {
+      padding: 4px;
+      width: 200px;
+      border-radius: 6px;
+      border: 1px solid #555;
+      background-color: #1e1e1e;
+      color: #f5f5f5;
+    }
+    button {
+      background-color: #00bfff;
+      color: #000;
+      padding: 8px 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #00a0cc;
+    }
+    #sessionData, #sessionStorageData {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #1e1e1e;
+      border-radius: 10px;
+      border: 1px solid #444;
+    }
+    .divider {
+      margin: 40px 0;
+      border-bottom: 2px solid #444;
+    }
+  </style>
+</head>
+
+<body onload="loadLocalData(); loadSessionData();">
+
+  <h2>Exercise 1–2: LocalStorage Example</h2>
+
+  <label>Destination:</label>
+  <input type="text" id="destination"><br><br>
+
+  <label>Arrival Date:</label>
+  <input type="date" id="arrival"><br><br>
+
+  <label>Services:</label><br>
+  <input type="checkbox" id="internet"> Internet <br>
+  <input type="checkbox" id="ac"> Air Conditioning <br>
+  <input type="checkbox" id="minibar"> Minibar <br>
+  <input type="checkbox" id="car"> Car rent <br>
+  <input type="checkbox" id="sauna"> Sauna <br><br>
+
+  <button onclick="saveLocalData()">💾 Save to LocalStorage</button>
+
+  <h3>Loaded LocalStorage Data:</h3>
+  <div id="sessionData">Session data goes here!</div>
+
+  <div class="divider"></div>
+
+  <h2>Exercise 3: SessionStorage Example</h2>
+
+  <label>Session Destination:</label>
+  <input type="text" id="sessionDestination">
+  <button onclick="saveSessionData()">💾 Save to SessionStorage</button>
+
+  <h3>Loaded SessionStorage Data:</h3>
+  <div id="sessionStorageData">Session data goes here!</div>
+
+  <div class="divider"></div>
+
+  <h3>SessionStorage vs LocalStorage</h3>
+  <ul>
+    <li><strong>localStorage</strong> keeps data even after browser is closed and reopened.</li>
+    <li><strong>sessionStorage</strong> is cleared when the tab or browser window is closed.</li>
+    <li>Use <strong>localStorage</strong> for things like saved preferences or todo lists.</li>
+    <li>Use <strong>sessionStorage</strong> for temporary data during one session.</li>
+  </ul>
+
+  <script>
+    function saveLocalData() {
+      const destination = document.getElementById("destination").value;
+      const arrival = document.getElementById("arrival").value;
+
+      const services = [];
+      if (document.getElementById("internet").checked) services.push("Internet");
+      if (document.getElementById("ac").checked) services.push("Air Conditioning");
+      if (document.getElementById("minibar").checked) services.push("Minibar");
+      if (document.getElementById("car").checked) services.push("Car rent");
+      if (document.getElementById("sauna").checked) services.push("Sauna");
+
+      localStorage.setItem("destination", destination);
+      localStorage.setItem("arrival", arrival);
+      localStorage.setItem("services", JSON.stringify(services));
+
+      alert("Data saved to LocalStorage!");
+      loadLocalData();
+    }
+
+    function loadLocalData() {
+      const destination = localStorage.getItem("destination");
+      const arrival = localStorage.getItem("arrival");
+      const services = JSON.parse(localStorage.getItem("services") || "[]");
+
+      if (destination || arrival || services.length > 0) {
+        document.getElementById("sessionData").innerHTML = `
+          <strong>Destination:</strong> ${destination || '-'} <br>
+          <strong>Arrival Date:</strong> ${arrival || '-'} <br>
+          <strong>Services:</strong> ${services.join(", ") || '-'}
+        `;
+      }
+    }
+
+    function saveSessionData() {
+      const destination = document.getElementById("sessionDestination").value;
+      sessionStorage.setItem("sessionDestination", destination);
+      alert("Data saved to SessionStorage!");
+      loadSessionData();
+    }
+
+    function loadSessionData() {
+      const sessionDestination = sessionStorage.getItem("sessionDestination");
+      if (sessionDestination) {
+        document.getElementById("sessionStorageData").innerHTML = `
+          <strong>Destination:</strong> ${sessionDestination}
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
