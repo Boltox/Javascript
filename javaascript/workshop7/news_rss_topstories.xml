@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Top News</title>
+    <item>
+      <title>Local cat saves family from fire</title>
+      <link>https://example.com/story1</link>
+    </item>
+    <item>
+      <title>New study shows benefits of morning exercise</title>
+      <link>https://example.com/story2</link>
+    </item>
+    <item>
+      <title>Community garden brings people together</title>
+      <link>https://example.com/story3</link>
+    </item>
+    <item>
+      <title>Tech company launches new AI tool</title>
+      <link>https://example.com/story4</link>
+    </item>
+  </channel>
+</rss>

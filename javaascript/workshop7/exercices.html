@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Workshop 7 - AJAX and XML</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1, h2 { color: #ffb400; }
+    button {
+      background-color: #ffb400; border: none; padding: 10px 15px;
+      color: #000; font-weight: bold; cursor: pointer; border-radius: 5px;
+    }
+    button:hover { background-color: #ffc933; }
+    table {
+      border-collapse: collapse; width: 80%; margin-top: 10px;
+      background-color: #1e1e1e; border: 1px solid #444;
+    }
+    th, td {
+      border: 1px solid #555; padding: 10px; text-align: left;
+    }
+    th { background-color: #333; color: #ffb400; }
+    tr:nth-child(even) { background-color: #2a2a2a; }
+    ul { list-style-type: square; margin-left: 20px; }
+    a { color: #ffb400; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    hr { margin: 30px 0; border-color: #444; }
+  </style>
+</head>
+<body>
+
+  <h1>Workshop 7: Using AJAX and Parsing XML</h1>
+
+  <!-- EXERCISE 1 -->
+  <h2>Exercise 1: Parsing Embedded XML Data</h2>
+  <button onclick="parseData0()">Show Quotes</button>
+  <div id="ex1"></div>
+
+  <!-- Embedded XML -->
+  <xml id="myXMLData">
+    <quotes>
+      <quote>I'm not concerned about all hell breaking loose, but that a PART of hell will break loose... it'll be much harder to detect.</quote>
+      <author>George Carlin</author>
+      <quote>The biggest problem with every art is by the use of appearance to create a loftier reality.</quote>
+      <author>Johann Wolfgang von Goethe</author>
+    </quotes>
+  </xml>
+
+  <hr>
+
+  <!-- EXERCISE 2 & 3 -->
+  <h2>Exercise 2 & 3: AJAX Call and Parsing XML</h2>
+  <button onclick="loadXMLDoc()">Load Famous Quotes</button>
+  <div id="ex23"></div>
+
+  <hr>
+
+  <!-- EXERCISE 4 -->
+  <h2>Exercise 4: AJAX Call to a Local Newsfeed</h2>
+  <button onclick="loadNews()">Load Newsfeed</button>
+  <ul id="newsFeed"></ul>
+
+  <script>
+    // ---------- EXERCISE 1 ----------
+    function parseData0() {
+      const xmlData = document.getElementById("myXMLData");
+      const quotes = xmlData.getElementsByTagName("quote");
+      const authors = xmlData.getElementsByTagName("author");
+      let output = "<table><tr><th>Quote</th><th>Author</th></tr>";
+
+      for (let i = 0; i < quotes.length; i++) {
+        output += `<tr><td>${quotes[i].textContent}</td><td>${authors[i].textContent}</td></tr>`;
+      }
+
+      output += "</table>";
+      document.getElementById("ex1").innerHTML = output;
+    }
+
+    // ---------- EXERCISE 2 & 3 ----------
+    function loadXMLDoc() {
+      const xmlhttp = new XMLHttpRequest();
+      xmlhttp.open("GET", "famous-quotes.xml", true);
+      xmlhttp.send();
+
+      xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+          parseXML(xmlhttp.responseXML);
+        }
+      };
+    }
+
+    function parseXML(xml) {
+      let table = "<table><tr><th>Quote</th><th>Author</th></tr>";
+      const quotes = xml.getElementsByTagName("quote");
+      const authors = xml.getElementsByTagName("author");
+
+      for (let i = 0; i < quotes.length; i++) {
+        table += `<tr><td>${quotes[i].textContent}</td><td>${authors[i].textContent}</td></tr>`;
+      }
+
+      table += "</table>";
+      document.getElementById("ex23").innerHTML = table;
+    }
+
+    // ---------- EXERCISE 4 ----------
+    function loadNews() {
+      const xhr = new XMLHttpRequest();
+      xhr.open("GET", "news_rss_topstories.xml", true);
+      xhr.send();
+
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          const xml = xhr.responseXML;
+          const items = xml.getElementsByTagName("item");
+          let list = "";
+
+          for (let i = 0; i < Math.min(items.length, 5); i++) {
+            const title = items[i].getElementsByTagName("title")[0].textContent;
+            const link = items[i].getElementsByTagName("link")[0].textContent;
+            list += `<li><a href="${link}" target="_blank">${title}</a></li>`;
+          }
+
+          document.getElementById("newsFeed").innerHTML = list;
+        }
+      };
+    }
+  </script>
+
+</body>
+</html>
